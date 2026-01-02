@@ -46,7 +46,7 @@ joblib.dump(df, PKL_DF)
 joblib.dump(cosine_sim, PKL_SIM)
 
 logging.info("✅ PKL files created successfully.")
-else:
+else :
     logging.info("📦 Loading existing PKL files...")
     df = joblib.load(PKL_DF)
     cosine_sim = joblib.load(PKL_SIM)
@@ -71,3 +71,4 @@ def recommend_movies(movie_name, top_n=5):
 
 
     return result_df
+
