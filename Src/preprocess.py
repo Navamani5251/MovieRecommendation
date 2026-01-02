@@ -1,10 +1,8 @@
 import pandas as pd
 import re
-import nltk
 import joblib
 import logging
 from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import os
@@ -15,22 +13,13 @@ logging.basicConfig(
     format='[%(asctime)s] %(levelname)s - %(message)s'
 )
 
-# Ensure NLTK resources (download once)
-def ensure_nltk():
-    try:
-        stopwords.words('english')
-    except LookupError:
-        nltk.download('punkt')
-        nltk.download('stopwords')
-
-ensure_nltk()
-
-stop_words = set(stopwords.words('english'))
+# Load stopwords (safe)
+stop_words = set(stopwords.words("english"))
 
 def preprocess_text(text):
     text = re.sub(r"[^a-zA-Z\s]", "", str(text))
     text = text.lower()
-    tokens = word_tokenize(text)
+    tokens = text.split()  # ✅ NO NLTK TOKENIZER
     tokens = [word for word in tokens if word not in stop_words]
     return " ".join(tokens)
 
@@ -63,5 +52,3 @@ def build_model(csv_path=CSV_PATH):
 
     logging.info("✅ Model files created.")
     return df, cosine_sim
-
-
