@@ -2,7 +2,6 @@ import pandas as pd
 import re
 import joblib
 import logging
-from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import os
@@ -13,21 +12,23 @@ logging.basicConfig(
     format='[%(asctime)s] %(levelname)s - %(message)s'
 )
 
-# Load stopwords (safe)
-stop_words = set(stopwords.words("english"))
+# Simple stopwords (NO NLTK)
+STOP_WORDS = {
+    "the","is","and","to","of","in","that","it","on","for","with",
+    "as","was","were","this","by","an","be","are","from","at"
+}
 
 def preprocess_text(text):
     text = re.sub(r"[^a-zA-Z\s]", "", str(text))
     text = text.lower()
-    tokens = text.split()  # ✅ NO NLTK TOKENIZER
-    tokens = [word for word in tokens if word not in stop_words]
+    tokens = text.split()
+    tokens = [w for w in tokens if w not in STOP_WORDS]
     return " ".join(tokens)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CSV_PATH = os.path.join(BASE_DIR, "movies.csv")
 
 def build_model(csv_path=CSV_PATH):
-
     logging.info("🚀 Building model from CSV...")
 
     df = pd.read_csv(
