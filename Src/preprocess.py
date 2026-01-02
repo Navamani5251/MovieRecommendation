@@ -33,7 +33,7 @@ def preprocess_text(text):
     tokens = [word for word in tokens if word not in stop_words]
     return " ".join(tokens)
 
-def build_model(csv_path="movies.csv"):
+def build_model(csv_path="../movies.csv"):
     logging.info("🚀 Building model from CSV...")
 
     df = pd.read_csv(
@@ -58,3 +58,4 @@ def build_model(csv_path="movies.csv"):
 
     logging.info("✅ Model files created.")
     return df, cosine_sim
+
