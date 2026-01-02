@@ -1,7 +1,7 @@
 # app.py
 import json
 import streamlit as st
-from recommend import df, recommend_movies
+ from recommend import df, recommend_movies
 from omdp_utils import get_movie_details
 
 
@@ -42,4 +42,5 @@ if st.button("🚀 Recommend Similar Movies"):
                             st.write("❌ No Poster Found")
                     with col2:
                         st.markdown(f"### {movie_title}")
+
                         st.markdown(f"*{plot}*" if plot != "N/A" else "_Plot not available_")
