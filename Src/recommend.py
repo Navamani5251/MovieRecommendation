@@ -27,7 +27,7 @@ if not os.path.exists(PKL_DF) or not os.path.exists(PKL_SIM):
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CSV_PATH = os.path.join(BASE_DIR, "movies.csv")
 
- df = pd.read_csv(
+df = pd.read_csv(
     CSV_PATH,
     engine="python",
     encoding="utf-8",
@@ -71,6 +71,7 @@ def recommend_movies(movie_name, top_n=5):
 
 
     return result_df
+
 
 
 
