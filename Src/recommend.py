@@ -24,7 +24,16 @@ logging.info("🔁 Checking model files...")
 if not os.path.exists(PKL_DF) or not os.path.exists(PKL_SIM):
     logging.info("⚙️ PKL files not found. Creating from movies.csv...")
 
-    df = pd.read_csv("../movies.csv")
+  BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CSV_PATH = os.path.join(BASE_DIR, "movies.csv")
+
+ df = pd.read_csv(
+    CSV_PATH,
+    engine="python",
+    encoding="utf-8",
+    on_bad_lines="skip"
+ )
+
 
     df['combined'] = df['genres'] + ' ' + df['keywords'] + ' ' + df['overview']
     df['cleaned_text'] = df['combined'].apply(preprocess_text)
@@ -62,4 +71,5 @@ def recommend_movies(movie_name, top_n=5):
 
 
     return result_df
+
 
