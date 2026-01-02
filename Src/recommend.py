@@ -71,8 +71,3 @@ def recommend_movies(movie_name, top_n=5):
 
 
     return result_df
-
-
-
-
-
