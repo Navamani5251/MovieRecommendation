@@ -1,7 +1,11 @@
 # recommend.py
 import joblib
 import logging
-
+import os
+import pandas as pd
+from preprocess import preprocess_text
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 # Setup logging
 logging.basicConfig(
     level=logging.INFO,
@@ -12,14 +16,32 @@ logging.basicConfig(
     ]
 )
 
-logging.info("🔁 Loading data...")
-try:
-    df = joblib.load('df_cleaned.pkl')
-    cosine_sim = joblib.load('cosine_sim.pkl')
-    logging.info("✅ Data loaded successfully.")
-except Exception as e:
-    logging.error("❌ Failed to load required files: %s", str(e))
-    raise e
+PKL_DF = "df_cleaned.pkl"
+PKL_SIM = "cosine_sim.pkl"
+
+logging.info("🔁 Checking model files...")
+
+if not os.path.exists(PKL_DF) or not os.path.exists(PKL_SIM):
+    logging.info("⚙️ PKL files not found. Creating from movies.csv...")
+
+    df = pd.read_csv("movies.csv")
+
+    df['combined'] = df['genres'] + ' ' + df['keywords'] + ' ' + df['overview']
+    df['cleaned_text'] = df['combined'].apply(preprocess_text)
+
+    tfidf = TfidfVectorizer(max_features=5000)
+    tfidf_matrix = tfidf.fit_transform(df['cleaned_text'])
+    cosine_sim = cosine_similarity(tfidf_matrix)
+
+    joblib.dump(df, PKL_DF)
+    joblib.dump(cosine_sim, PKL_SIM)
+
+    logging.info("✅ PKL files created successfully.")
+else:
+    logging.info("📦 Loading existing PKL files...")
+    df = joblib.load(PKL_DF)
+    cosine_sim = joblib.load(PKL_SIM)
+
 
 
 def recommend_movies(movie_name, top_n=5):
@@ -37,5 +59,6 @@ def recommend_movies(movie_name, top_n=5):
     result_df = df[['title']].iloc[movie_indices].reset_index(drop=True)
     result_df.index = result_df.index + 1  # Start from 1 instead of 0
     result_df.index.name = "S.No."
+
 
     return result_df
