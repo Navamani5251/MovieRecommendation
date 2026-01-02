@@ -24,7 +24,7 @@ logging.info("🔁 Checking model files...")
 if not os.path.exists(PKL_DF) or not os.path.exists(PKL_SIM):
     logging.info("⚙️ PKL files not found. Creating from movies.csv...")
 
-  BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CSV_PATH = os.path.join(BASE_DIR, "movies.csv")
 
  df = pd.read_csv(
@@ -71,5 +71,6 @@ def recommend_movies(movie_name, top_n=5):
 
 
     return result_df
+
 
 
