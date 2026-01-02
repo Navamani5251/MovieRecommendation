@@ -35,17 +35,17 @@ df = pd.read_csv(
  )
 
 
-    df['combined'] = df['genres'] + ' ' + df['keywords'] + ' ' + df['overview']
-    df['cleaned_text'] = df['combined'].apply(preprocess_text)
+df['combined'] = df['genres'] + ' ' + df['keywords'] + ' ' + df['overview']
+df['cleaned_text'] = df['combined'].apply(preprocess_text)
 
-    tfidf = TfidfVectorizer(max_features=5000)
-    tfidf_matrix = tfidf.fit_transform(df['cleaned_text'])
-    cosine_sim = cosine_similarity(tfidf_matrix)
+tfidf = TfidfVectorizer(max_features=5000)
+tfidf_matrix = tfidf.fit_transform(df['cleaned_text'])
+cosine_sim = cosine_similarity(tfidf_matrix)
 
-    joblib.dump(df, PKL_DF)
-    joblib.dump(cosine_sim, PKL_SIM)
+joblib.dump(df, PKL_DF)
+joblib.dump(cosine_sim, PKL_SIM)
 
-    logging.info("✅ PKL files created successfully.")
+logging.info("✅ PKL files created successfully.")
 else:
     logging.info("📦 Loading existing PKL files...")
     df = joblib.load(PKL_DF)
@@ -71,6 +71,7 @@ def recommend_movies(movie_name, top_n=5):
 
 
     return result_df
+
 
 
 
