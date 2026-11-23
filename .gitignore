@@ -172,3 +172,9 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Local backups & runtime generated model artifacts
+backup_original/
+*.pkl
+!Src/tfidf_matrix.pkl
+
